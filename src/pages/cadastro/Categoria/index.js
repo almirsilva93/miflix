@@ -31,7 +31,6 @@ function CadastroCategoria() {
   }
 
   useEffect(() => {
-    console.log('Teste');
     const URL_TOP = 'http://localhost:8080/categorias';
     fetch(URL_TOP)
       .then(async (respostaDoServidor) => {
