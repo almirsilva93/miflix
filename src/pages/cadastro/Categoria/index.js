@@ -1,10 +1,10 @@
 /* eslint-disable linebreak-style */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { isElement } from 'react-dom/test-utils';
 import PageDeafult from '../../../componentes/PageDefault';
 import FormField from '../../../componentes/FormField';
 import Button from '../../../componentes/Button';
+import useForm from '../../../hooks/useForm';
 
 function CadastroCategoria() {
   const valoresIniciais = {
@@ -13,25 +13,11 @@ function CadastroCategoria() {
     cor: '',
   };
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState(valoresIniciais);
 
-  function setValue(chave, valor) {
-    setValues({
-      ...values,
-      [chave]: valor,
-    });
-  }
-
-  function handleChange(infosDoEvento) {
-    const { name, value } = infosDoEvento.target;
-    setValue(
-      name,
-      value,
-    );
-  }
+  const { values, handleChange, clearForm } = useForm(valoresIniciais);
 
   useEffect(() => {
-    const URL_TOP = 'http://localhost:8080/categorias';
+    const URL_TOP = window.location.hostname.includes('localhost') ? 'http://localhost:8080/categorias' : 'https://miflix.herokuapp.com/categorias';
     fetch(URL_TOP)
       .then(async (respostaDoServidor) => {
         const resposta = await respostaDoServidor.json();
@@ -54,7 +40,7 @@ function CadastroCategoria() {
           values,
         ]);
 
-        setValues(valoresIniciais);
+        clearForm();
       }}
       >
         <FormField
@@ -94,8 +80,8 @@ function CadastroCategoria() {
 
       <ul>
         {categorias.map((categoria) => (
-          <li key={`${categoria.nome}`}>
-            {categoria.nome}
+          <li key={`${categoria.titulo}`}>
+            {categoria.titulo}
           </li>
         ))}
       </ul>
